@@ -25,6 +25,8 @@
 
     }
 
+    refreshPeople();
+
     $("#show-add").on('click', function () {
         $("#firstName").val('');
         $("#lastName").val('');
@@ -51,31 +53,36 @@
         });
     });
 
-    $(".btn-danger").on('click', function () {
+    $("table").on('click',".btn-danger", function () {
+        console.log("hellomm")
         const id = $(this).data('person-id')
-        $.post("/home/deletePerson", { id }, function () { refreshPeople() }
+        $.post("/home/deletePerson", { id }, function () { refreshPeople() })
     })
 
 
 
-    $(".btn-warning").on("click", function () {
+    $("table").on("click", ".btn-warning", function () {
+        console.log("hello");
         const id = $(this).data('person-id')
         $.get('/Home/GetPersonById', { id }, function (person) {
             $("#firstName").val(person.firstName)
             $('#lastName').val(person.lastName)
             $("#age").val(person.age)
-            $('#save-person').hide
-            $('#update-person').show
+            $('#save-person').hide()
+            $('#update-person').show()
             $('.modal-title').text('Edit-person')
-            $("modal").show();
-        }
+            $(".modal").data('person-id', id);
+            modal.show();
+        })
 
     })
     $("#update-person").on('click', function () {
-        const firstName = ('#firstName').val()
+       
+        const firstName = $('#firstName').val()
         const lastname = $('#lastName').val()
-        const age = $('#age')
-        const id = $(this).data('person-id')
+        const age = $('#age').val()
+        console.log("kkk")
+        const id = $(".modal").data('person-id');   
         $.post('/home/UpdatePerson', {
             firstName: firstName,
             lastname: lastname,
@@ -85,7 +92,7 @@
             function () {
                 refreshPeople()
                 modal.hide()
-            }
+            })
 
             
     })
